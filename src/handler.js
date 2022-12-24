@@ -42,4 +42,23 @@ const getAllNotesHandler = () => ({
   data: { notes },
 });
 
-module.exports = { addNoteHandler, getAllNotesHandler };
+const getNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+
+  const note = notes.find(({ id: noteId }) => noteId === id);
+  if (note) {
+    return {
+      status: 'success',
+      data: { note },
+    };
+  }
+  const response = h.response({
+    status: 'fail',
+    message: 'Note can\'t be found',
+  });
+  response.code(404);
+
+  return response;
+};
+
+module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler };
